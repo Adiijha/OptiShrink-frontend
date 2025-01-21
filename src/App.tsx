@@ -1,11 +1,39 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/landingPage/Header';
+import Hero from './components/landingPage/Hero';
+import Footer from './components/landingPage/Footer';
+import WhyChoose from './components/landingPage/WhyChoose';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
 
-function App() {
+const App: React.FC = () => {
+    return (
+        <Router>
+            <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-grow">
+                    <Routes>
+                        {/* Landing Page */}
+                        <Route
+                            path="/"
+                            element={
+                                <>
+                                    <Hero />
+                                    <WhyChoose />
+                                </>
+                            }
+                        />
+                        {/* Sign In Page */}
+                        <Route path="/signin" element={<SignIn />} />
+                        {/* Sign Up Page */}
+                        <Route path="/signup" element={<SignUp />} />
+                    </Routes>
+                </main>
+                <Footer />
+            </div>
+        </Router>
+    );
+};
 
-  return (
-    <>
-      <div>Hello</div>  
-    </>
-  )
-}
-
-export default App
+export default App;
