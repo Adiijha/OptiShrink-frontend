@@ -1,6 +1,7 @@
 import React from 'react';
 import herobanner from '../../assets/herobanner.jpg';
 import herobanner2 from '../../assets/herobanner2.jpg';
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
     return (
@@ -16,12 +17,12 @@ const Hero: React.FC = () => {
                         Reduce file sizes, optimize images, and save storage—all in a single tool built for speed and security.
                     </p>
                     <div className="flex justify-center md:justify-start space-x-4">
-                        <a
-                            href="#get-started"
+                        <Link
+                            to="/compressfile"
                             className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
                         >
                             Try for Free
-                        </a>
+                        </Link>
                         <a
                             href="#learn-more"
                             className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"

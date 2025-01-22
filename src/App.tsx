@@ -6,6 +6,8 @@ import Footer from './components/landingPage/Footer';
 import WhyChoose from './components/landingPage/WhyChoose';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
+import File from './components/fileCompressor/File';
+import Image from './components/imageOptimizer/Image';
 
 const App: React.FC = () => {
     return (
@@ -28,6 +30,9 @@ const App: React.FC = () => {
                         <Route path="/signin" element={<SignIn />} />
                         {/* Sign Up Page */}
                         <Route path="/signup" element={<SignUp />} />
+
+                        <Route path="/compressfile" element={<File />} />
+                        <Route path="/optimizeimage" element={<Image />} />
                     </Routes>
                 </main>
                 <Footer />

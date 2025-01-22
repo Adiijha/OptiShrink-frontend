@@ -15,13 +15,21 @@ const Header: React.FC = () => {
                 {/* Navigation */}
                 <nav>
                     <ul className="hidden md:flex space-x-8 text-gray-700 text-md font-medium">
-                        <li>
-                            <a
-                                href="#features"
+                    <li>
+                            <Link
+                                to="/optimizeimage"
                                 className="hover:text-blue-500 transition duration-300"
                             >
-                                Features
-                            </a>
+                                Image Optimizer
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/compressfile"
+                                className="hover:text-blue-500 transition duration-300"
+                            >
+                                File Compressor
+                            </Link>
                         </li>
                         <li>
                             <a
