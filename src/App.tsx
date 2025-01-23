@@ -8,9 +8,12 @@ import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import File from './components/fileCompressor/File';
 import Image from './components/imageOptimizer/Image';
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 const App: React.FC = () => {
     return (
+        <Provider store={store}>
         <Router>
             <div className="min-h-screen flex flex-col">
                 <Header />
@@ -38,6 +41,7 @@ const App: React.FC = () => {
                 <Footer />
             </div>
         </Router>
+        </Provider>
     );
 };
 

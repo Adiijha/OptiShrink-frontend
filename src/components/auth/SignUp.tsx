@@ -1,7 +1,60 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { registerUser } from '../../api/api';
 
 const SignUp: React.FC = () => {
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    const { name, username, email, password } = formData;
+
+    // Simple validation
+    if (!name || !username || !email || !password) {
+      return setError('All fields are required.');
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return setError('Username should only contain letters, numbers, and underscores.');
+    }
+
+    const payload = { name, username, email, password };
+
+    try {
+      setIsLoading(true);
+      const response = await registerUser(payload);
+      console.log('Registration Response:', response);
+
+      // Redirect after successful registration
+      navigate('/dashboard'); // Assuming you want to navigate to an OTP page
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      setError(err?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
     return (
         <div className="min-h-screen flex bg-gray-100">
             {/* Left Section */}
@@ -70,7 +123,7 @@ const SignUp: React.FC = () => {
             {/* Right Section (Form) */}
             <div className="w-full md:w-1/2 flex items-center justify-center bg-white py-16 px-8">
                 <div className="w-full max-w-md">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         {/* Header */}
                         <h2 className="text-3xl font-extrabold text-blue-800 mb-6 text-center">
                             Create Your Account
@@ -84,8 +137,27 @@ const SignUp: React.FC = () => {
                             <input
                                 type="text"
                                 id="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
                                 className="mt-1 p-3 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 placeholder="Enter your name"
+                            />
+                        </div>
+                        
+                        {/* Username Field */}
+                        <div className="mb-4">
+                            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                                Username
+                            </label>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                className="mt-1 p-3 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                placeholder="Enter your email"
                             />
                         </div>
 
@@ -97,6 +169,9 @@ const SignUp: React.FC = () => {
                             <input
                                 type="email"
                                 id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
                                 className="mt-1 p-3 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 placeholder="Enter your email"
                             />
@@ -110,17 +185,29 @@ const SignUp: React.FC = () => {
                             <input
                                 type="password"
                                 id="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
                                 className="mt-1 p-3 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
                                 placeholder="Create a password"
                             />
                         </div>
+                        <span
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer pt-6"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                  </span>
+
+                  {error && <div className="text-red-500 text-sm">{error}</div>}
 
                         {/* Submit Button */}
                         <button
                             type="submit"
+                            disabled={isLoading}
                             className="w-full bg-blue-700 text-white py-3 px-4 text-lg font-bold rounded-md hover:bg-blue-800 transition duration-300"
                         >
-                            Sign Up
+                            {isLoading ? 'Signing Up...' : 'Sign Up'}
                         </button>
                     </form>
 
