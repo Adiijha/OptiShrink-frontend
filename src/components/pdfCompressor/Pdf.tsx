@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as pdfjsLib from 'pdfjs-dist';
 
-const Image: React.FC = () => {
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
+
+const File: React.FC = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [progress, setProgress] = useState(0);
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [pdfPreview, setPdfPreview] = useState<string | null>(null);
     const [compressionLevel, setCompressionLevel] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleCompressClick = () => {
-        if (!selectedImage || !compressionLevel) return;
+        if (!selectedFile || !compressionLevel) return;
 
         setIsProcessing(true);
         setProgress(0);
@@ -26,11 +32,40 @@ const Image: React.FC = () => {
         }, 500);
     };
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
-            setSelectedImage(file);
+            setSelectedFile(file);
             setCompressionLevel(null);
+
+            const fileReader = new FileReader();
+            fileReader.onload = async (e) => {
+                const arrayBuffer = e.target?.result as ArrayBuffer;
+                if (arrayBuffer) {
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    const page = await pdf.getPage(1);
+                    const viewport = page.getViewport({ scale: 1 });
+
+                    // Create a canvas to render the PDF page
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    if (context) {
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+
+                        const renderContext = {
+                            canvasContext: context,
+                            viewport,
+                        };
+                        await page.render(renderContext).promise;
+
+                        // Convert canvas to image
+                        const dataUrl = canvas.toDataURL();
+                        setPdfPreview(dataUrl);
+                    }
+                }
+            };
+            fileReader.readAsArrayBuffer(file);
         }
     };
 
@@ -38,43 +73,39 @@ const Image: React.FC = () => {
         setShowPopup(false);
     };
 
+    const handleDownloadClick = () => {
+        navigate('/download');
+    };
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
-            <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${
-                                        selectedImage
-                                            ? 'max-w-7xl'
-                                            : 'max-w-2xl'
-                                    }`}>
-                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
-                    Optimize Your Images
-                </h1>
+            <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${selectedFile ? 'max-w-7xl' : 'max-w-2xl'}`}>
+                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">Optimize Your PDFs</h1>
                 <p className="text-gray-600 mb-8 text-center">
-                    Reduce image size while retaining quality. Perfect for web, social media, and more.
+                    Reduce PDF size while retaining quality. Perfect for web, emails, and more.
                 </p>
 
-                <div className={`grid grid-cols-1 gap-8 ${selectedImage ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
-                    {/* Image Upload Section */}
+                <div className={`grid grid-cols-1 gap-8 ${selectedFile ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
+                    {/* File Upload Section */}
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-10 hover:border-blue-500 transition">
                         <input
                             type="file"
-                            id="image-upload"
+                            id="file-upload"
                             className="hidden"
-                            accept="image/*"
-                            onChange={handleImageChange}
+                            accept=".pdf"
+                            onChange={handleFileChange}
                         />
                         <label
-                            htmlFor="image-upload"
+                            htmlFor="file-upload"
                             className="block text-gray-600 text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
                         >
-                            {selectedImage ? (
-                                <img
-                                    src={URL.createObjectURL(selectedImage)}
-                                    alt="Selected"
-                                    className="w-full h-auto mb-4 rounded-lg"
-                                />
+                            {pdfPreview ? (
+                                <img src={pdfPreview} alt="PDF Preview" className="w-full h-auto rounded-lg" />
+                            ) : selectedFile ? (
+                                <p className="text-gray-800 font-semibold">{selectedFile.name}</p>
                             ) : (
                                 <>
-                                    Drag and drop your images here or{' '}
+                                    Drag and drop your PDFs here or{' '}
                                     <span className="text-blue-600 font-semibold">browse</span>
                                 </>
                             )}
@@ -83,11 +114,9 @@ const Image: React.FC = () => {
 
                     {/* Compression Level and Action Section */}
                     <div>
-                        {selectedImage && (
+                        {selectedFile && (
                             <>
-                                <p className="text-gray-600 text-xl font-medium mb-4">
-                                    Choose Compression Level:
-                                </p>
+                                <p className="text-gray-600 text-xl font-medium mb-4">Choose Compression Level:</p>
                                 <div className="flex flex-col space-y-4 mb-6">
                                     {[
                                         {
@@ -106,7 +135,7 @@ const Image: React.FC = () => {
                                             level: 'high',
                                             title: 'High Compression',
                                             description:
-                                                'Lower quality, maximum compression. Best for web and social media.',
+                                                'Lower quality, maximum compression. Best for web and email.',
                                         },
                                     ].map((option) => (
                                         <div
@@ -164,11 +193,10 @@ const Image: React.FC = () => {
                 {showPopup && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                                Optimization Complete!
-                            </h2>
-                            <p className="text-gray-600 mb-6">Your image is ready to download.</p>
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Optimization Complete!</h2>
+                            <p className="text-gray-600 mb-6">Your PDF is ready to download.</p>
                             <button
+                                onClick={handleDownloadClick}
                                 className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition"
                             >
                                 Download
@@ -187,4 +215,4 @@ const Image: React.FC = () => {
     );
 };
 
-export default Image;
+export default File;

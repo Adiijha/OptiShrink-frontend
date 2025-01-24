@@ -10,11 +10,11 @@ const Hero: React.FC = () => {
                 {/* Text Content */}
                 <div className="md:w-1/2 text-center md:text-left pl-20">
                     <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-800 mb-6">
-                        Compress Files & Images <br />
+                        Compress PDF & Images <br />
                         <span className="text-blue-500 leading-snug">With Ease & Precision</span>
                     </h1>
                     <p className="text-lg text-gray-600 mb-8">
-                        Reduce file sizes, optimize images, and save storage—all in a single tool built for speed and security.
+                        Reduce PDF sizes, optimize images, and save storage—all in a single tool built for speed and security.
                     </p>
                     <div className="flex justify-center md:justify-start space-x-4">
                         <Link

@@ -6,7 +6,7 @@ import Footer from './components/landingPage/Footer';
 import WhyChoose from './components/landingPage/WhyChoose';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
-import File from './components/fileCompressor/File';
+import File from './components/pdfCompressor/Pdf';
 import Image from './components/imageOptimizer/Image';
 import { Provider } from "react-redux";
 import store from "./redux/store";

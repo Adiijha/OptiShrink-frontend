@@ -11,7 +11,7 @@ const WhyChoose: React.FC = () => {
                         Why Choose <span className="font-extrabold bg-gradient-to-r from-blue-600 via-blue-400 to-blue-700 text-transparent bg-clip-text">OptiShrink?</span>
                     </h2>
                     <p className="text-gray-600 text-lg">
-                        Beyond file compression, OptiShrink offers versatile tools to manage files, optimize images, and ensure security. Here’s what sets us apart:
+                        Beyond file compression, OptiShrink offers versatile tools to manage PDFs, optimize images, and ensure security. Here’s what sets us apart:
                     </p>
                 </div>
 
@@ -27,7 +27,7 @@ const WhyChoose: React.FC = () => {
                                 Versatile Compression
                             </h3>
                             <p className="text-gray-600">
-                                Compress files, optimize images, and streamline your storage needs—all in one tool.
+                                Compress PDFs, optimize images, and streamline your storage needs—all in one tool.
                             </p>
                         </div>
                     </div>

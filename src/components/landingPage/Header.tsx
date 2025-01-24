@@ -28,7 +28,7 @@ const Header: React.FC = () => {
                                 to="/compressfile"
                                 className="hover:text-blue-500 transition duration-300"
                             >
-                                File Compressor
+                                PDF Compressor
                             </Link>
                         </li>
                         <li>
