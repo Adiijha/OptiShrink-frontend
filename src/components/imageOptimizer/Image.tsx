@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { optimizeImage } from '../../api/api'; // Assuming you have optimizeImage function
 
 const Image: React.FC = () => {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -6,31 +7,45 @@ const Image: React.FC = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [compressionLevel, setCompressionLevel] = useState<string | null>(null);
+    const [downloadUrl, setDownloadUrl] = useState<string>(''); // Store the image URL
 
-    const handleCompressClick = () => {
+    const handleCompressClick = async () => {
         if (!selectedImage || !compressionLevel) return;
 
         setIsProcessing(true);
         setProgress(0);
 
-        const interval = setInterval(() => {
-            setProgress((prevProgress) => {
-                if (prevProgress >= 100) {
-                    clearInterval(interval);
-                    setIsProcessing(false);
-                    setShowPopup(true);
-                    return 100;
-                }
-                return prevProgress + 10;
-            });
-        }, 500);
+        try {
+            // Call the optimizeImage API function
+            const response = await optimizeImage(selectedImage, compressionLevel);
+
+            // Check if the 'success' key is true in the response
+            if (response.success) {
+                setDownloadUrl(response.data); // Assuming the response contains Cloudinary URL
+                setIsProcessing(false);
+                setShowPopup(true);
+            } else {
+                console.error('Error compressing image:', response.message);
+                setIsProcessing(false);
+            }
+        } catch (error) {
+            console.error('Error during image optimization:', error);
+            setIsProcessing(false);
+        }
     };
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files && event.target.files[0];
-        if (file) {
-            setSelectedImage(file);
-            setCompressionLevel(null);
+    const handleDownload = () => {
+        // Fetch the image as a blob and trigger download
+        if (downloadUrl) {
+            fetch(downloadUrl)
+                .then((res) => res.blob()) // Fetch image as blob
+                .then((blob) => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'optimized-image.jpg'; // Default filename
+                    link.click(); // Trigger download
+                })
+                .catch((error) => console.error('Download failed:', error));
         }
     };
 
@@ -41,10 +56,8 @@ const Image: React.FC = () => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
             <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${
-                                        selectedImage
-                                            ? 'max-w-7xl'
-                                            : 'max-w-2xl'
-                                    }`}>
+                selectedImage ? 'max-w-7xl' : 'max-w-2xl'
+            }`}>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
                     Optimize Your Images
                 </h1>
@@ -60,7 +73,13 @@ const Image: React.FC = () => {
                             id="image-upload"
                             className="hidden"
                             accept="image/*"
-                            onChange={handleImageChange}
+                            onChange={(e) => {
+                                const file = e.target.files && e.target.files[0];
+                                if (file) {
+                                    setSelectedImage(file);
+                                    setCompressionLevel(null);
+                                }
+                            }}
                         />
                         <label
                             htmlFor="image-upload"
@@ -93,20 +112,17 @@ const Image: React.FC = () => {
                                         {
                                             level: 'low',
                                             title: 'Low Compression',
-                                            description:
-                                                'High quality, minimal compression. Suitable for professional use.',
+                                            description: 'High quality, minimal compression. Suitable for professional use.',
                                         },
                                         {
                                             level: 'mid',
                                             title: 'Medium Compression',
-                                            description:
-                                                'Balanced quality and file size. Recommended for general-purpose use.',
+                                            description: 'Balanced quality and file size. Recommended for general-purpose use.',
                                         },
                                         {
                                             level: 'high',
                                             title: 'High Compression',
-                                            description:
-                                                'Lower quality, maximum compression. Best for web and social media.',
+                                            description: 'Lower quality, maximum compression. Best for web and social media.',
                                         },
                                     ].map((option) => (
                                         <div
@@ -170,6 +186,7 @@ const Image: React.FC = () => {
                             <p className="text-gray-600 mb-6">Your image is ready to download.</p>
                             <button
                                 className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition"
+                                onClick={handleDownload}
                             >
                                 Download
                             </button>

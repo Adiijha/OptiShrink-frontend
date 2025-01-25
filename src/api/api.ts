@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const USER_URL = import.meta.env.VITE_API_USER_URL;
+const BACKEND_URL = import.meta.env.VITE_API_BACKEND_URL;
 
 interface LoginResponse {
   data: {
@@ -32,7 +33,6 @@ interface RegisterUserResponse {
 interface UserProfile {
   name: string;
 }
-
 
 export const loginUser = async (
   emailOrUsername: string,
@@ -130,5 +130,47 @@ export const registerUser = async (
     throw new Error(message);
   }
 };
+
+export const compresspdf = async(file: File): Promise<Blob> => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await axios.post(`${USER_URL}/compresspdf`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+
+    return response.data; // Return the compressed PDF file
+  } catch (error: any) {
+    const message = error?.response?.data?.message || error.message || "Error compressing PDF.";
+    throw new Error(message);
+  }
+}
+
+// Frontend API function to compress image
+export const optimizeImage = async (file: File, compressionLevel: string): Promise<any> => {
+  try {
+    const formData = new FormData();
+    formData.append('compressionLevel', compressionLevel);
+    formData.append('image', file);
+
+    const response = await axios.post(`${BACKEND_URL}/image/optimize-img`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data; // Return the optimized image details
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.message || error.message || 'Failed to compress image';
+    throw new Error(message);
+  }
+};
+
+
 
 
