@@ -32,7 +32,7 @@ const Analytics: React.FC = () => {
                         <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                             <div className="flex items-center mb-4">
                                 <FileIcon className="text-blue-600 w-8 h-8 mr-4" />
-                                <h3 className="text-xl font-semibold text-gray-800">Total Shortened Files</h3>
+                                <h3 className="text-xl font-semibold text-gray-800">Total Files</h3>
                             </div>
                             <p className="text-3xl font-bold text-blue-600">{analyticsData?.totalShortenedFiles}</p>
                         </div>

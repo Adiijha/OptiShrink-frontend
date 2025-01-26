@@ -157,10 +157,16 @@ export const optimizeImage = async (file: File, compressionLevel: string): Promi
     formData.append('compressionLevel', compressionLevel);
     formData.append('image', file);
 
+    const token = localStorage.getItem("accessToken");
+
+    // If no token, don't send the Authorization header
+    const headers: any = { 'Content-Type': 'multipart/form-data' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await axios.post(`${BACKEND_URL}/image/optimize-img`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers,
     });
 
     return response.data; // Return the optimized image details
@@ -171,6 +177,24 @@ export const optimizeImage = async (file: File, compressionLevel: string): Promi
   }
 };
 
+export const getAllLinks = async (): Promise<any> => {
+  try {
+    const token = localStorage.getItem("accessToken");
 
+    if (!token) {
+      throw new Error("You must be logged in to view your image links");
+    }
 
+    const response = await axios.get(`${USER_URL}/getlinks`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Send the access token in the Authorization header
+      },
+    });
+
+    return response.data; // Return the list of image links
+  } catch (error: any) {
+    const message = error?.response?.data?.message || error.message || "Failed to fetch image links";
+    throw new Error(message);
+  }
+};
 

@@ -43,7 +43,7 @@ const VHeader: React.FC = () => {
                 to="/dashboard"
                 end // Ensures exact match
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -58,7 +58,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/optimizeimage"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -73,7 +73,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/batchcompress"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -88,7 +88,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/compresspdf"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -103,7 +103,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/history"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -118,7 +118,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/analytics"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -133,7 +133,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/settings"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -148,7 +148,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/about"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"
@@ -163,7 +163,7 @@ const VHeader: React.FC = () => {
               <NavLink
                 to="/dashboard/help"
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 text-base sm:text-lg md:text-xl px-4 py-2 rounded-md ${
+                  `flex items-center space-x-3 text-base sm:text-lg md:text-lg px-4 py-2 rounded-md ${
                     isActive
                       ? "text-blue-600 bg-white"
                       : "text-white hover:bg-blue-700"

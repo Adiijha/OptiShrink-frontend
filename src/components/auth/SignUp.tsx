@@ -43,7 +43,8 @@ const SignUp: React.FC = () => {
       console.log('Registration Response:', response);
 
       // Redirect after successful registration
-      navigate('/dashboard'); // Assuming you want to navigate to an OTP page
+      alert('Registration successful! Please signin to continue.');
+      navigate('/signin'); // Assuming you want to navigate to an OTP page
     } catch (err: any) {
       console.error('Registration error:', err);
       setError(err?.message || 'Something went wrong. Please try again.');
