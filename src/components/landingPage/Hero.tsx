@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
                     </p>
                     <div className="flex justify-center md:justify-start space-x-4">
                         <Link
-                            to="/compressfile"
+                            to="/optimizeimage"
                             className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
                         >
                             Try for Free
