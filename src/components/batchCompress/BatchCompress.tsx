@@ -67,7 +67,7 @@ const BatchCompress: React.FC = () => {
                         Batch Optimize Your Images
                     </h1>
                     <p className="text-gray-600 mb-8">
-                        Optimize multiple images at once. Reduce file size while retaining quality.
+                        Optimize multiple images at once. Reduce image size while retaining quality.
                     </p>
 
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -165,7 +165,7 @@ const BatchCompress: React.FC = () => {
                                         onClick={handleCompressClick}
                                         disabled={isProcessing || !compressionLevel}
                                     >
-                                        {isProcessing ? 'Optimizing...' : 'Compress All Files'}
+                                        {isProcessing ? 'Optimizing...' : 'Compress All Images'}
                                     </button>
 
                                     {isProcessing && (
