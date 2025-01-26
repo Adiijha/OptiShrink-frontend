@@ -55,7 +55,7 @@ const App: React.FC = () => {
               path="/dashboard"
               element={
                 <NoHeaderFooterLayout>
-                  <Dashboard userName='Aditya' />
+                  <Dashboard />
                 </NoHeaderFooterLayout>
               }
             />
