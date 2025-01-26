@@ -8,9 +8,16 @@ const Image: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [compressionLevel, setCompressionLevel] = useState<string | null>(null);
     const [downloadUrl, setDownloadUrl] = useState<string>(''); // Store the image URL
+    const [uploadCount, setUploadCount] = useState(0); // Track the number of uploads
+    const [loginPopup, setLoginPopup] = useState(false); // Show login popup after limit
 
     const handleCompressClick = async () => {
         if (!selectedImage || !compressionLevel) return;
+
+        if (uploadCount >= 10) {
+            setLoginPopup(true); // Show login popup when limit is reached
+            return;
+        }
 
         setIsProcessing(true);
         setProgress(0);
@@ -24,6 +31,7 @@ const Image: React.FC = () => {
                 setDownloadUrl(response.data); // Assuming the response contains Cloudinary URL
                 setIsProcessing(false);
                 setShowPopup(true);
+                setUploadCount(uploadCount + 1); // Increment upload count
             } else {
                 console.error('Error compressing image:', response.message);
                 setIsProcessing(false);
@@ -53,12 +61,14 @@ const Image: React.FC = () => {
         setShowPopup(false);
     };
 
+    const closeLoginPopup = () => {
+        setLoginPopup(false);
+    };
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
-            <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${
-                selectedImage ? 'max-w-7xl' : 'max-w-2xl'
-            }`}>
-                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
+            <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${selectedImage ? 'max-w-7xl' : 'max-w-2xl'}`}>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">
                     Optimize Your Images
                 </h1>
                 <p className="text-gray-600 mb-8 text-center">
@@ -83,7 +93,7 @@ const Image: React.FC = () => {
                         />
                         <label
                             htmlFor="image-upload"
-                            className="block text-gray-600 text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
+                            className="block text-gray-600 text-md md:text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
                         >
                             {selectedImage ? (
                                 <img
@@ -104,7 +114,7 @@ const Image: React.FC = () => {
                     <div>
                         {selectedImage && (
                             <>
-                                <p className="text-gray-600 text-xl font-medium mb-4">
+                                <p className="text-gray-600 text-lg md:text-xl font-medium mb-4">
                                     Choose Compression Level:
                                 </p>
                                 <div className="flex flex-col space-y-4 mb-6">
@@ -176,7 +186,7 @@ const Image: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Popup */}
+                {/* Optimization Complete Popup */}
                 {showPopup && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
@@ -193,6 +203,35 @@ const Image: React.FC = () => {
                             <button
                                 className="border-2 border-blue-600 text-blue-500 ml-3 py-1.5 px-4 rounded-lg font-semibold hover:bg-gray-100 transition"
                                 onClick={closePopup}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Login Required Popup */}
+                {loginPopup && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                                Login Required
+                            </h2>
+                            <p className="text-gray-600 mb-6">
+                                You've reached the maximum upload limit. Log in for unlimited access!
+                            </p>
+                            <button
+                                className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition"
+                                onClick={() => {
+                                    // Add login redirection logic here
+                                    closeLoginPopup();
+                                }}
+                            >
+                                Login
+                            </button>
+                            <button
+                                className="border-2 border-blue-600 text-blue-500 ml-3 py-1.5 px-4 rounded-lg font-semibold hover:bg-gray-100 transition"
+                                onClick={closeLoginPopup}
                             >
                                 Close
                             </button>

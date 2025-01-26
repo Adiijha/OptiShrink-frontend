@@ -11,10 +11,19 @@ const File: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [pdfPreview, setPdfPreview] = useState<string | null>(null);
     const [compressionLevel, setCompressionLevel] = useState<string | null>(null);
+    const [compressionCount, setCompressionCount] = useState(0);
+    const [limitReached, setLimitReached] = useState(false);
     const navigate = useNavigate();
+
+    const MAX_FREE_COMPRESSIONS = 10;
 
     const handleCompressClick = () => {
         if (!selectedFile || !compressionLevel) return;
+
+        if (compressionCount >= MAX_FREE_COMPRESSIONS) {
+            setLimitReached(true);
+            return;
+        }
 
         setIsProcessing(true);
         setProgress(0);
@@ -25,6 +34,7 @@ const File: React.FC = () => {
                     clearInterval(interval);
                     setIsProcessing(false);
                     setShowPopup(true);
+                    setCompressionCount((prevCount) => prevCount + 1);
                     return 100;
                 }
                 return prevProgress + 10;
@@ -77,10 +87,14 @@ const File: React.FC = () => {
         navigate('/download');
     };
 
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
             <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${selectedFile ? 'max-w-7xl' : 'max-w-2xl'}`}>
-                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">Optimize Your PDFs</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">Optimize Your PDFs</h1>
                 <p className="text-gray-600 mb-8 text-center">
                     Reduce PDF size while retaining quality. Perfect for web, emails, and more.
                 </p>
@@ -97,7 +111,7 @@ const File: React.FC = () => {
                         />
                         <label
                             htmlFor="file-upload"
-                            className="block text-gray-600 text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
+                            className="block text-gray-600 text-md md:text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
                         >
                             {pdfPreview ? (
                                 <img src={pdfPreview} alt="PDF Preview" className="w-full h-auto rounded-lg" />
@@ -116,7 +130,7 @@ const File: React.FC = () => {
                     <div>
                         {selectedFile && (
                             <>
-                                <p className="text-gray-600 text-xl font-medium mb-4">Choose Compression Level:</p>
+                                <p className="text-gray-600 text-lg md:text-xl font-medium mb-4">Choose Compression Level:</p>
                                 <div className="flex flex-col space-y-4 mb-6">
                                     {[
                                         {
@@ -170,7 +184,7 @@ const File: React.FC = () => {
                                     onClick={handleCompressClick}
                                     disabled={isProcessing || !compressionLevel}
                                 >
-                                    {isProcessing ? 'Optimizing...' : 'Optimize Now'}
+                                    {isProcessing ? 'Compressing...' : 'Compress Now'}
                                 </button>
 
                                 {isProcessing && (
@@ -193,7 +207,7 @@ const File: React.FC = () => {
                 {showPopup && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Optimization Complete!</h2>
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Compression Complete!</h2>
                             <p className="text-gray-600 mb-6">Your PDF is ready to download.</p>
                             <button
                                 onClick={handleDownloadClick}
@@ -204,6 +218,30 @@ const File: React.FC = () => {
                             <button
                                 className="border-2 border-blue-600 text-blue-500 ml-3 py-1.5 px-4 rounded-lg font-semibold hover:bg-gray-100 transition"
                                 onClick={closePopup}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Limit Reached Popup */}
+                {limitReached && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Limit Reached</h2>
+                            <p className="text-gray-600 mb-6">
+                                You have reached your free compression limit. Log in for unlimited access.
+                            </p>
+                            <button
+                                onClick={handleLoginClick}
+                                className="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition"
+                            >
+                                Log In
+                            </button>
+                            <button
+                                className="border-2 border-blue-600 text-blue-500 ml-3 py-1.5 px-4 rounded-lg font-semibold hover:bg-gray-100 transition"
+                                onClick={() => setLimitReached(false)}
                             >
                                 Close
                             </button>

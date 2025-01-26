@@ -41,10 +41,10 @@ const History: React.FC = () => {
     return (
         <div className="">
             <Header />
-            <div className="min-h-screen flex">
+            <div className="min-h-screen flex flex-col md:flex-row">
                 <VHeader />
-                <div className=" bg-white p-16 mt-1 w-full">
-                    <h1 className="text-4xl font-bold text-blue-600 mb-6 ">History</h1>
+                <div className="bg-white p-8 md:p-16 mt-4 md:mt-1 w-full">
+                    <h1 className="text-3xl md:text-4xl font-bold text-blue-600 mb-6">History</h1>
 
                     {/* Filter options */}
                     <div className="mb-8">

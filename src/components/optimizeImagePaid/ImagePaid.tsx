@@ -63,7 +63,7 @@ const Image: React.FC = () => {
             <div className={`w-full bg-gray-50 mt-3 p-8 ${
                 selectedImage ? 'max-w-7xl' : 'max-w-2xl'
             }`}>
-                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">
                     Optimize Your Images
                 </h1>
                 <p className="text-gray-600 mb-8 text-center">
@@ -88,7 +88,7 @@ const Image: React.FC = () => {
                         />
                         <label
                             htmlFor="image-upload"
-                            className="block text-gray-600 text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
+                            className="block text-gray-600 text-md md:text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
                         >
                             {selectedImage ? (
                                 <img
@@ -109,7 +109,7 @@ const Image: React.FC = () => {
                     <div>
                         {selectedImage && (
                             <>
-                                <p className="text-gray-600 text-xl font-medium mb-4">
+                                <p className="text-gray-600 text-lg md:text-xl font-medium mb-4">
                                     Choose Compression Level:
                                 </p>
                                 <div className="flex flex-col space-y-4 mb-6">

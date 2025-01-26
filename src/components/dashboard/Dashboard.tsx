@@ -1,32 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import VHeader from "./VHeader";
 import { Link } from "react-router-dom";
+import { getUserProfile } from "../../api/api";
 import { FileImage, Archive, FileText, History, Settings, HelpCircle } from "lucide-react"; // Importing lucide-react icons
 
-interface DashboardProps {
-  userName: string; // Add userName as a prop
-}
+const Dashboard: React.FC = () => {
+  const [userName, setUserName] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-const Dashboard: React.FC<DashboardProps> = ({ userName }) => {
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const profile = await getUserProfile();
+        setUserName(profile.name); // Set the user's name
+      } catch (err: any) {
+        setError(err.message || 'Failed to fetch user profile.'); // Handle errors
+      }
+    };
+
+    fetchUserName();
+  }, []);
+
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
       <Header />
       <div className="flex flex-row flex-grow">
         <VHeader />
-        <div className="flex-grow overflow-y-auto p-12">
+        <div className="flex-grow overflow-y-auto p-6 lg:p-12">
           {/* Dashboard Header */}
-          <div className="mb-8 flex justify-between items-center">
+          <div className="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center">
             <div>
-              <p className="text-4xl font-bold text-black mt-1">
-                Welcome back, <span className="font-semibold text-blue-600">{userName}</span>!
-              </p>
-              <h1 className="text-4xl font-bold text-blue-600 mt-5">Dashboard</h1>
+              {userName && (
+                <p className="text-3xl lg:text-4xl font-bold text-black mt-1">
+                  Welcome back, <span className="font-semibold text-blue-600">{userName}</span>!
+                </p>
+              )}
+              <h1 className="text-3xl lg:text-4xl font-bold text-blue-600 mt-3 md:mt-5">Dashboard</h1>
             </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="text-red-500 bg-red-100 p-4 rounded-lg mb-6">
+              {error}
+            </div>
+          )}
+
           {/* Quick Access Links */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
             <Link
               to="/dashboard/optimizeimage"
               className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-100 transition"

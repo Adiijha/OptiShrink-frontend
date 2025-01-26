@@ -85,7 +85,7 @@ const File: React.FC = () => {
         <div className="min-h-screen flex ">
             <VHeader />
             <div className={`w-full bg-gray-50 mt-3 p-8 ${selectedFile ? 'max-w-7xl' : 'max-w-2xl'}`}>
-                <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">Optimize Your PDFs</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">Optimize Your PDFs</h1>
                 <p className="text-gray-600 mb-8 text-center">
                     Reduce PDF size while retaining quality. Perfect for web, emails, and more.
                 </p>
@@ -102,7 +102,7 @@ const File: React.FC = () => {
                         />
                         <label
                             htmlFor="file-upload"
-                            className="block text-gray-600 text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
+                            className="block text-gray-600 text-md md:text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
                         >
                             {pdfPreview ? (
                                 <img src={pdfPreview} alt="PDF Preview" className="w-full h-auto rounded-lg" />
@@ -121,7 +121,7 @@ const File: React.FC = () => {
                     <div>
                         {selectedFile && (
                             <>
-                                <p className="text-gray-600 text-xl font-medium mb-4">Choose Compression Level:</p>
+                                <p className="text-gray-600 text-lg md:text-xl font-medium mb-4">Choose Compression Level:</p>
                                 <div className="flex flex-col space-y-4 mb-6">
                                     {[
                                         {

@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     {/* Logo & Tagline */}
                     <div className="text-center md:text-left mb-6 md:mb-0">
-                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-400 to-blue-700 text-transparent bg-clip-text">
+                    <h1 className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-blue-400 to-blue-700 text-transparent bg-clip-text">
                         OptiShrink
                     </h1>
 

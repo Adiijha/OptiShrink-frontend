@@ -20,8 +20,8 @@ const Settings: React.FC = () => {
             <Header />
             <div className="min-h-screen flex">
                 <VHeader />
-                <div className={`w-full p-16 mt-1 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-50 text-gray-800'}`}>
-                    <h1 className="text-4xl font-bold mb-8 text-blue-600">Settings</h1>
+                <div className={`w-full p-8 md:p-16 mt-1 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-50 text-gray-800'}`}>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-8 text-blue-600">Settings</h1>
 
                     {/* General Settings Section */}
                     <div className="space-y-8">

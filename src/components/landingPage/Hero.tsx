@@ -8,8 +8,8 @@ const Hero: React.FC = () => {
         <section className="relative bg-gradient-to-r from-blue-50 via-white to-blue-100 h-screen flex items-center overflow-x-hidden">
             <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
                 {/* Text Content */}
-                <div className="md:w-1/2 text-center md:text-left pl-20">
-                    <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-800 mb-6">
+                <div className="md:w-1/2 text-center md:text-left px-2 pl-0 md:pl-20">
+                    <h1 className="text-4xl md:text-6xl font-extrabold leading-tight text-gray-800 mb-6">
                         Compress PDF & Images <br />
                         <span className="text-blue-500 leading-snug">With Ease & Precision</span>
                     </h1>
@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
                 </div>
 
                 {/* Image Content */}
-                <div className="md:w-1/2 flex justify-center relative">
+                <div className="md:w-1/2 md:flex justify-center relative hidden">
                     <div className="relative w-80 h-80 md:w-[400px] md:h-[400px]">
                         <img
                             src={herobanner}

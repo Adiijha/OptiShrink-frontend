@@ -62,8 +62,8 @@ const BatchCompress: React.FC = () => {
             <Header />
             <div className="flex min-h-screen">
                 <VHeader />
-                <div className="w-full bg-gray-50 mt-3 p-16 max-w-7xl">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4 ">
+                <div className="w-full bg-gray-50 mt-3 p-10 md:p-16 max-w-7xl">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 ">
                         Batch Optimize Your Images
                     </h1>
                     <p className="text-gray-600 mb-8">
@@ -88,7 +88,7 @@ const BatchCompress: React.FC = () => {
                             />
                             <label
                                 htmlFor="file-upload"
-                                className="block text-gray-600 text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
+                                className="block text-gray-600 text-md md:text-lg font-medium cursor-pointer hover:text-blue-500 text-center"
                             >
                                 {selectedFiles.length > 0 ? (
                                     <div>
@@ -109,7 +109,7 @@ const BatchCompress: React.FC = () => {
                         <div>
                             {selectedFiles.length > 0 && (
                                 <>
-                                    <p className="text-gray-600 text-xl font-medium mb-4">
+                                    <p className="text-gray-600 text-lg md:text-xl font-medium mb-4">
                                         Choose Compression Level:
                                     </p>
                                     <div className="flex flex-col space-y-4 mb-6">
