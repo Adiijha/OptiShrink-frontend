@@ -17,6 +17,13 @@ const Image: React.FC = () => {
         setIsProcessing(true);
         setProgress(0);
 
+        const progressInterval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev < 75) return prev + 15; 
+                return prev;
+            });
+        }, 600);
+
         try {
             // Call the optimizeImage API function
             const response = await optimizeImage(selectedImage, compressionLevel);
@@ -26,13 +33,19 @@ const Image: React.FC = () => {
                 setDownloadUrl(response.data); // Assuming the response contains Cloudinary URL
                 setIsProcessing(false);
                 setShowPopup(true);
+
+                clearInterval(progressInterval);
+                setProgress(100);
             } else {
                 console.error('Error compressing image:', response.message);
                 setIsProcessing(false);
             }
         } catch (error) {
+
             console.error('Error during image optimization:', error);
             setIsProcessing(false);
+            clearInterval(progressInterval);
+
         }
     };
 
@@ -154,7 +167,7 @@ const Image: React.FC = () => {
                                 </div>
 
                                 <button
-                                    className={`py-3 px-6 rounded-lg font-semibold transition ${
+                                    className={`py-3 px-6 rounded-lg font-semibold transition mr-4 ${
                                         isProcessing || !compressionLevel
                                             ? 'bg-gray-400 text-gray-800 cursor-not-allowed hidden'
                                             : 'bg-blue-600 text-white hover:bg-blue-700'

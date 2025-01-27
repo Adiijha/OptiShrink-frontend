@@ -138,11 +138,15 @@ export const compressPdf: (file: File, compressionLevel: string) => Promise<Blob
     formData.append("file", file);
     formData.append("compressionLevel", compressionLevel); 
 
+    const token = localStorage.getItem("accessToken");
+
+    const headers: any = { 'Content-Type': 'multipart/form-data' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await axios.post(`${BACKEND_URL}/pdf/compress-pdf`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
-      },
+      headers,
     });
 
     // Assuming the response contains a JSON object with the compressed PDF URL and metadata
@@ -208,4 +212,33 @@ export const getAllLinks = async (): Promise<any> => {
     throw new Error(message);
   }
 };
+
+// API function to delete a file
+export const deleteLink = async (fileId: string): Promise<any> => {
+  try {
+    const token = localStorage.getItem("accessToken"); // Ensure the token key is 'accessToken'
+
+    if (!token) {
+      throw new Error("You must be logged in to delete your file");
+    }
+
+    const response = await axios.delete(`${USER_URL}/deletelink`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, // Attach the JWT token in the header
+      },
+      data: {
+        fileId, // Send the fileId to delete
+      },
+    });
+
+    return response.data; // Return the API response data upon success
+  } catch (error: any) {
+    console.error('Error deleting the file:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || 'An error occurred while deleting the file');
+  }
+};
+
+
+
 

@@ -198,7 +198,7 @@ const File: React.FC = () => {
                                 </div>
 
                                 <button
-                                    className={`py-3 px-6 rounded-lg font-semibold transition ${
+                                    className={`py-3 px-6 rounded-lg font-semibold transition mr-4 ${
                                         isProcessing || !compressionLevel
                                             ? 'bg-gray-400 text-gray-800 cursor-not-allowed hidden'
                                             : 'bg-blue-600 text-white hover:bg-blue-700'
