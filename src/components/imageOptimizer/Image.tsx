@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { optimizeImage } from '../../api/api'; // Assuming you have optimizeImage function
+import { optimizeImage } from '../../api/api'; 
 
 const Image: React.FC = () => {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -21,6 +21,14 @@ const Image: React.FC = () => {
 
         setIsProcessing(true);
         setProgress(0);
+    
+        const progressInterval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev < 75) return prev + 15; 
+                return prev;
+            });
+        }, 600);
+
 
         try {
             // Call the optimizeImage API function
@@ -32,6 +40,8 @@ const Image: React.FC = () => {
                 setIsProcessing(false);
                 setShowPopup(true);
                 setUploadCount(uploadCount + 1); // Increment upload count
+                clearInterval(progressInterval);
+                setProgress(100);
             } else {
                 console.error('Error compressing image:', response.message);
                 setIsProcessing(false);
@@ -43,7 +53,6 @@ const Image: React.FC = () => {
     };
 
     const handleDownload = () => {
-        // Fetch the image as a blob and trigger download
         if (downloadUrl) {
             fetch(downloadUrl)
                 .then((res) => res.blob()) // Fetch image as blob
@@ -69,7 +78,7 @@ const Image: React.FC = () => {
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
             <div className={`w-full bg-white rounded-lg shadow-lg p-8 ${selectedImage ? 'max-w-7xl' : 'max-w-2xl'}`}>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">
-                    Optimize Your Images
+                    Optimize Your Image
                 </h1>
                 <p className="text-gray-600 mb-8 text-center">
                     Reduce image size while retaining quality. Perfect for web, social media, and more.
@@ -159,7 +168,7 @@ const Image: React.FC = () => {
                                 </div>
 
                                 <button
-                                    className={`py-3 px-6 rounded-lg font-semibold transition ${
+                                    className={`py-3 px-6 rounded-lg font-semibold transition mr-4 ${
                                         isProcessing || !compressionLevel
                                             ? 'bg-gray-400 text-gray-800 cursor-not-allowed hidden'
                                             : 'bg-blue-600 text-white hover:bg-blue-700'
@@ -168,6 +177,22 @@ const Image: React.FC = () => {
                                     disabled={isProcessing || !compressionLevel}
                                 >
                                     {isProcessing ? 'Optimizing...' : 'Optimize Now'}
+                                </button>
+                                <button
+                                    className={`py-3 px-6 rounded-lg font-semibold transition ${
+                                        isProcessing 
+                                            ? 'bg-gray-400 text-gray-800 cursor-not-allowed hidden'
+                                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                                    }`}
+                                    onClick={() => {
+                                        setSelectedImage(null);
+                                        setCompressionLevel(null);
+                                        setDownloadUrl('');
+                                        setProgress(0);
+                                        setShowPopup(false);
+                                    }}
+                                >
+                                    Select Another?
                                 </button>
 
                                 {isProcessing && (

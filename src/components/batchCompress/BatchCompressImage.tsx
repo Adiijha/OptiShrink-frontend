@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { optimizeImage } from '../../api/api'; // Assuming you have optimizeImage function
 import Header from '../dashboard/Header';
 import VHeader from '../dashboard/VHeader';
+import { Link } from 'react-router-dom';
 
 const BatchCompress: React.FC = () => {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -39,6 +40,7 @@ const BatchCompress: React.FC = () => {
         }
     };
 
+
     const handleDownload = () => {
         downloadUrls.forEach((url, index) => {
             fetch(url)
@@ -63,12 +65,18 @@ const BatchCompress: React.FC = () => {
             <div className="flex min-h-screen">
                 <VHeader />
                 <div className="w-full bg-gray-50 mt-3 p-10 md:p-16 max-w-7xl">
+                <div className="flex justify-between items-center">
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 ">
                         Batch Optimize Your Images
                     </h1>
+                    <Link to="/dashboard/batchcompress">
+                    <button className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl'>Go Back</button>
+                    </Link>
+                    </div>
                     <p className="text-gray-600 mb-8">
                         Optimize multiple images at once. Reduce image size while retaining quality.
                     </p>
+                    
 
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                         {/* File Upload Section */}

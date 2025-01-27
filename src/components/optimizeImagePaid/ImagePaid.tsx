@@ -164,6 +164,22 @@ const Image: React.FC = () => {
                                 >
                                     {isProcessing ? 'Optimizing...' : 'Optimize Now'}
                                 </button>
+                                <button
+                                    className={`py-3 px-6 rounded-lg font-semibold transition ${
+                                        isProcessing 
+                                            ? 'bg-gray-400 text-gray-800 cursor-not-allowed hidden'
+                                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                                    }`}
+                                    onClick={() => {
+                                        setSelectedImage(null);
+                                        setCompressionLevel(null);
+                                        setDownloadUrl('');
+                                        setProgress(0);
+                                        setShowPopup(false);
+                                    }}
+                                >
+                                    Select Another?
+                                </button>
 
                                 {isProcessing && (
                                     <div className="mt-6">

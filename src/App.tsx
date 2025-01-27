@@ -17,7 +17,9 @@ import Help from './components/help/Help';
 import About from './components/about/About';
 import History from './components/history/History';
 import Settings from './components/settings/Settings';
-import BatchCompress from './components/batchCompress/BatchCompress';
+import BatchCompressImage from './components/batchCompress/BatchCompressImage';
+import Choice from './components/batchCompress/Choice';
+import BatchCompressPdf from './components/batchCompress/BatchCompressPdf';
 
 // ScrollToTop Component
 const ScrollToTop = () => {
@@ -119,7 +121,23 @@ const App: React.FC = () => {
               path="/dashboard/batchcompress"
               element={
                 <NoHeaderFooterLayout>
-                  <BatchCompress  />
+                  <Choice  />
+                </NoHeaderFooterLayout>
+              }
+            />
+            <Route
+              path="/dashboard/batchcompress/image"
+              element={
+                <NoHeaderFooterLayout>
+                  <BatchCompressImage  />
+                </NoHeaderFooterLayout>
+              }
+            />
+            <Route
+              path="/dashboard/batchcompress/pdf"
+              element={
+                <NoHeaderFooterLayout>
+                  <BatchCompressPdf  />
                 </NoHeaderFooterLayout>
               }
             />

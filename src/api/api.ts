@@ -131,19 +131,30 @@ export const registerUser = async (
   }
 };
 
-export const compresspdf = async(file: File): Promise<Blob> => {
+
+export const compressPdf: (file: File, compressionLevel: string) => Promise<Blob> = async (file, compressionLevel) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("compressionLevel", compressionLevel); 
 
-    const response = await axios.post(`${USER_URL}/compresspdf`, formData, {
+    const response = await axios.post(`${BACKEND_URL}/pdf/compress-pdf`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
       },
     });
 
-    return response.data; // Return the compressed PDF file
+    // Assuming the response contains a JSON object with the compressed PDF URL and metadata
+    if (response.data.success) {
+      const compressedPdfUrl = response.data.data.compressedPdfUrl;
+      // You can now fetch the PDF file (for download or preview)
+      const pdfResponse = await axios.get(compressedPdfUrl, { responseType: 'blob' });
+
+      return pdfResponse.data; // Return the actual Blob (compressed PDF)
+    } else {
+      throw new Error(response.data.message || 'Error compressing PDF.');
+    }
   } catch (error: any) {
     const message = error?.response?.data?.message || error.message || "Error compressing PDF.";
     throw new Error(message);

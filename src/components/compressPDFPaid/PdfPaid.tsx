@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as pdfjsLib from 'pdfjs-dist';
 import Header from '../dashboard/Header';
 import VHeader from '../dashboard/VHeader';
+import { compressPdf } from '../../api/api';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.js`;
 
@@ -13,26 +13,39 @@ const File: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [pdfPreview, setPdfPreview] = useState<string | null>(null);
     const [compressionLevel, setCompressionLevel] = useState<string | null>(null);
-    const navigate = useNavigate();
+    const [compressedPdfUrl ,setCompressedPdfUrl] = useState<string | null>(null);
 
-    const handleCompressClick = () => {
-        if (!selectedFile || !compressionLevel) return;
-
-        setIsProcessing(true);
-        setProgress(0);
-
-        const interval = setInterval(() => {
-            setProgress((prevProgress) => {
-                if (prevProgress >= 100) {
-                    clearInterval(interval);
-                    setIsProcessing(false);
-                    setShowPopup(true);
-                    return 100;
-                }
-                return prevProgress + 10;
-            });
-        }, 500);
-    };
+   const handleCompressClick = async () => {
+           if (!selectedFile || !compressionLevel) return;
+       
+           setIsProcessing(true);
+           setProgress(0);
+       
+           const progressInterval = setInterval(() => {
+               setProgress((prev) => {
+                   if (prev < 75) return prev + 15; 
+                   return prev;
+               });
+           }, 600);
+       
+           try {
+               const compressedPdf = await compressPdf(selectedFile, compressionLevel);
+               setCompressedPdfUrl(URL.createObjectURL(compressedPdf)); 
+               setIsProcessing(false);
+               setShowPopup(true);
+       
+               clearInterval(progressInterval);
+               setProgress(100);
+           } catch (error) {
+               setIsProcessing(false);
+               clearInterval(progressInterval);
+               if (error instanceof Error) {
+                   alert('Error during compression: ' + (error.message || 'Unknown error'));
+               } else {
+                   alert('Error during compression: Unknown error');
+               }
+           }
+       };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
@@ -76,7 +89,12 @@ const File: React.FC = () => {
     };
 
     const handleDownloadClick = () => {
-        navigate('/download');
+        if (compressedPdfUrl) {
+            const link = document.createElement('a');
+            link.href = compressedPdfUrl;
+            link.download = 'compressed.pdf';
+            link.click();
+        }
     };
 
     return (
@@ -85,10 +103,11 @@ const File: React.FC = () => {
         <div className="min-h-screen flex ">
             <VHeader />
             <div className={`w-full bg-gray-50 mt-3 p-8 ${selectedFile ? 'max-w-7xl' : 'max-w-2xl'}`}>
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">Optimize Your PDFs</h1>
-                <p className="text-gray-600 mb-8 text-center">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">Compress Your PDFs</h1>
+                <p className="text-gray-600 mb-3 text-center">
                     Reduce PDF size while retaining quality. Perfect for web, emails, and more.
                 </p>
+                <p className="text-red-600 mb-8 text-center">PDF Size Shouldn't be more than 10MB</p>
 
                 <div className={`grid grid-cols-1 gap-8 ${selectedFile ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
                     {/* File Upload Section */}
@@ -176,6 +195,23 @@ const File: React.FC = () => {
                                     disabled={isProcessing || !compressionLevel}
                                 >
                                     {isProcessing ? 'Optimizing...' : 'Optimize Now'}
+                                </button>
+                                <button
+                                    className={`py-3 px-6 rounded-lg font-semibold transition ${
+                                        isProcessing 
+                                            ? 'bg-gray-400 text-gray-800 cursor-not-allowed hidden'
+                                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                                    }`}
+                                    onClick={() => {
+                                        setSelectedFile(null);
+                                        setCompressionLevel(null);
+                                        setCompressedPdfUrl(null);
+                                        setProgress(0);
+                                        setShowPopup(false);
+                                        setPdfPreview(null);
+                                    }}
+                                >
+                                    Select Another?
                                 </button>
 
                                 {isProcessing && (
